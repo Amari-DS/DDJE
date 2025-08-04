@@ -2,7 +2,7 @@ from dataclasses import dataclass, field, asdict
 from functools import cached_property
 from typing import Any, List, Dict
 
-from app.misc.misc import BindedEnum
+from app.misc.misc import BindedEnum, NoteImage
 
 
 @dataclass
@@ -46,10 +46,10 @@ class Position:
 
 
 class NoteType(BindedEnum):
-    HAND_LEFT = 6, '✋L (blue)'
-    HAND_RIGHT = 7, '✋R (red)'
-    FOOT_LEFT = 8, '🦶L (blue)'
-    FOOT_RIGHT = 9, '🦶R (red)'
+    HAND_LEFT = 6, NoteImage('resources/icons/hl_r.png', 'L')
+    HAND_RIGHT = 7, NoteImage('resources/icons/hr_b.png', 'R')
+    FOOT_LEFT = 8, NoteImage('resources/icons/fl_r.png', 'L')
+    FOOT_RIGHT = 9, NoteImage('resources/icons/fr_b.png', 'R')
 
 
 @dataclass
@@ -61,7 +61,7 @@ class Node(BaseEntry):
      __parent: 'Data' = field(metadata={'skip': True}, default=None)
 
      def to_repr(self):
-         return self.time_real, self.position.y, self.position.x, self.noteType
+         return self.time_real, self.position.y, self.position.x
 
      @property
      def time_real(self):

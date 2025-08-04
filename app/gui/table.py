@@ -19,16 +19,15 @@ class ColumnParam(object):
 # noinspection PyTypeChecker
 class Table(object):
     __columns = {
-        'time': ColumnParam({'text': 'Time'}, {'width': 60, 'stretch': False}),
+        'time': ColumnParam({'text': 'Time'}, {'width': 110, 'stretch': False, 'anchor': tk.CENTER}),
         'v_pos': ColumnParam({'text': 'V pos'}, {'width': 50, 'stretch': False, 'anchor': tk.CENTER}),
-        'h_pos': ColumnParam({'text': 'H pos'}, {'width': 50, 'stretch': False, 'anchor': tk.CENTER}),
-        'type': ColumnParam({'text': 'Type'}, {'minwidth': 100, 'stretch': True}),
+        'h_pos': ColumnParam({'text': 'H pos'}, {'width': 50, 'stretch': False, 'anchor': tk.CENTER})
     }
 
     def __init__(self, gui: 'GUI'):
         self.__gui = gui
         self.__table_frame = ttk.Frame(self.__gui.get_root())
-        self.__table = ttk.Treeview(self.__table_frame, columns=list(self.__columns.keys()), show='headings')
+        self.__table = ttk.Treeview(self.__table_frame, columns=list(self.__columns.keys()), show=('headings', 'tree'))
         self.__content: Dict[str, Any] = None
 
     def setup(self):
@@ -37,10 +36,12 @@ class Table(object):
         self.__add_scrollbar()
         self.__table.bind('<Double-1>', self.__on_double_click)
         style = ttk.Style(self.__gui.get_root())
-        style.configure('Treeview', rowheight=38)
+        style.configure('Treeview', rowheight=32, font=('Helvetica', 16))
 
     def __set_columns(self):
         self.__table.pack(fill=tk.BOTH, side=tk.LEFT, expand=True)
+        self.__table.heading('#0', text='Type')
+        self.__table.column('#0', anchor=tk.W, width=120, stretch=False)
         for c_id, c_param in self.__columns.items():
             self.__table.heading(c_id, **c_param.heading_params)
             self.__table.column(c_id, **c_param.column_params)
@@ -54,7 +55,9 @@ class Table(object):
         self.__reset()
         self.__content = {n.id: n for n in nodes_list}
         for node in sorted(nodes_list, key=lambda n: n.time):
-            self.__table.insert('', tk.END, iid=node.id, values=node.to_repr())
+            note_image = node.noteType.binded_value
+            self.__table.insert('', tk.END, iid=node.id, values=node.to_repr(),
+                                text=' ' + note_image.label, image=note_image.image)
 
     def __reset(self):
         self.__table.delete(*self.__table.get_children())

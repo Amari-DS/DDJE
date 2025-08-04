@@ -1,4 +1,6 @@
+import tkinter as tk
 from enum import Enum
+from functools import cached_property
 from typing import Any, TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -19,3 +21,18 @@ class BindedEnum(Enum):
 
 class Storage(object):
     current_data: 'Root'
+
+
+class NoteImage(object):
+
+    def __init__(self, path: str, label: str) -> None:
+        self.__path = path
+        self.__label = label
+
+    @cached_property
+    def image(self):
+        return tk.PhotoImage(file=self.__path)
+
+    @property
+    def label(self):
+        return self.__label
