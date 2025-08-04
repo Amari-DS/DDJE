@@ -26,7 +26,7 @@ class Table(object):
 
     def __init__(self, gui: 'GUI'):
         self.__gui = gui
-        self.__table_frame = ttk.Frame(self.__gui.get_root())
+        self.__table_frame = ttk.Frame(self.__gui.get_main_frame())
         self.__table = ttk.Treeview(self.__table_frame, columns=list(self.__columns.keys()), show=('headings', 'tree'))
         self.__content: Dict[str, Any] = None
 

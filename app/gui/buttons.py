@@ -5,6 +5,7 @@ from tkinter.messagebox import showinfo
 from typing import TYPE_CHECKING
 
 from app.core.loader import Loader
+from app.core.state import State
 from app.misc.misc import Storage
 
 if TYPE_CHECKING:
@@ -16,7 +17,7 @@ class Buttons(object):
 
     def __init__(self, gui: 'GUI'):
         self.__gui = gui
-        self.__buttons_frame = ttk.Frame(self.__gui.get_root())
+        self.__buttons_frame = ttk.Frame(self.__gui.get_main_frame())
 
     def setup(self):
         self.__buttons_frame.pack(fill=tk.Y, side=tk.LEFT, padx=5, pady=5)
@@ -32,6 +33,9 @@ class Buttons(object):
         if filepath:
             Loader(filepath).load()
             self.__gui.get_table().load_data(Storage.current_data.data.sphereNodes)
+            State.reset()
+            State.get_state().current_file_path = filepath
+            self.__gui.get_status_bar().update()
 
     def __print_raw(self):
         node = self.__gui.get_table().get_selection()

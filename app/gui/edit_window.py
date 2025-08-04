@@ -3,7 +3,7 @@ from tkinter.messagebox import showerror
 from typing import TYPE_CHECKING
 
 from app.core.models import Node
-
+from app.core.state import State
 
 if TYPE_CHECKING:
      from app.gui.gui import GUI
@@ -96,3 +96,5 @@ class EditWindow(object):
         self.__node.position.v_pos = current_value
         self.__gui.get_table().update_row(self.__node)
         self.__window.destroy()
+        State.get_state().modified = True
+        self.__gui.get_status_bar().update()
