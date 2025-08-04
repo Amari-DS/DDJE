@@ -1,7 +1,7 @@
 import json
 
 from app.core.models import Root
-from app.misc.misc import Storage
+from app.core.state import State
 
 
 class Loader:
@@ -12,4 +12,5 @@ class Loader:
     def load(self) -> None:
         with (open(self.__filepath) as jf):
             content = json.load(jf)
-            Storage.current_data = Root.from_json(content)
+            State.reset()
+            State.get_state().current_data = Root.from_json(content)

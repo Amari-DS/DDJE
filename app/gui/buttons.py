@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 
 from app.core.loader import Loader
 from app.core.state import State
-from app.misc.misc import Storage
+from app.misc.backup import Backup
 
 if TYPE_CHECKING:
      from app.gui.gui import GUI
@@ -25,15 +25,14 @@ class Buttons(object):
         open_button.pack(side=tk.TOP)
         print_raw = ttk.Button(self.__buttons_frame, text='Print raw', command=self.__print_raw)
         print_raw.pack()
-        save_local = ttk.Button(self.__buttons_frame, text='Save local', command=self.__save_local)
+        save_local = ttk.Button(self.__buttons_frame, text='Save', command=self.__save)
         save_local.pack()
 
     def __load_data(self):
         filepath = filedialog.askopenfilename()
         if filepath:
             Loader(filepath).load()
-            self.__gui.get_table().load_data(Storage.current_data.data.sphereNodes)
-            State.reset()
+            self.__gui.get_table().load_data(State.get_state().current_data.data.sphereNodes)
             State.get_state().current_file_path = filepath
             self.__gui.get_status_bar().update()
 
@@ -43,11 +42,16 @@ class Buttons(object):
             return
         print(node.to_dict())
 
-    @staticmethod
-    def __save_local():
+    def __save(self):
+        Backup().backup()
+
         try:
-            with open('out.json', 'w') as file:
-                json.dump(Storage.current_data.to_dict(), file, separators=(',', ':'))
-            showinfo(title='Info', message='Saved')
+            state = State.get_state()
+            with open(state.current_file_path, 'w') as file:
+                json.dump(state.current_data.to_dict(), file, separators=(',', ':'))
         except IOError as e:
             print(f'Error saving data to file: {e}')
+
+        State.get_state().modified = False
+        self.__gui.get_status_bar().update()
+        showinfo(title='Info', message='Saved')
