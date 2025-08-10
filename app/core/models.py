@@ -50,6 +50,9 @@ class NoteType(BindedEnum):
     HAND_RIGHT = 7, NoteImage('resources/icons/hr_b.png', 'R')
     FOOT_LEFT = 8, NoteImage('resources/icons/fl_r.png', 'L')
     FOOT_RIGHT = 9, NoteImage('resources/icons/fr_b.png', 'R')
+    ROAD_BLOCK = 14, NoteImage('resources/icons/rb_h.png', 'B')
+    WALL_START = 15, NoteImage('resources/icons/ws_v.png', 'W')
+    WALL_END = 16, NoteImage('resources/icons/we_v.png', 'W')
 
 
 @dataclass
@@ -95,6 +98,7 @@ class Node(BaseEntry):
 class Data(BaseEntry):
      orderCountPerBeat: int
      sphereNodes: List[Node] = None
+     roadBlockNodes: List[Node] = None
      __parent: 'Root'  = field(metadata={'skip': True}, default=None)
 
      @staticmethod
@@ -102,6 +106,7 @@ class Data(BaseEntry):
          data = Data(orderCountPerBeat=json_data['orderCountPerBeat'], other_data=json_data)
          data.__parent = parent
          data.sphereNodes = [Node.from_json(data, nj) for nj in json_data.pop('sphereNodes')]
+         data.roadBlockNodes = [Node.from_json(data, nj) for nj in json_data.pop('roadBlockNodes')]
          return data
 
      @cached_property
@@ -111,7 +116,12 @@ class Data(BaseEntry):
      def to_dict(self) -> Dict[str, Any]:
          obj_dict = super().to_dict()
          obj_dict['sphereNodes'] = [n.to_dict() for n in self.sphereNodes]
+         obj_dict['roadBlockNodes'] = [n.to_dict() for n in self.roadBlockNodes]
          return obj_dict
+
+     @property
+     def all_nodes(self) -> List[Node]:
+         return self.sphereNodes + self.roadBlockNodes
 
 
 @dataclass

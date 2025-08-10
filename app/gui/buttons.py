@@ -32,7 +32,7 @@ class Buttons(object):
         filepath = filedialog.askopenfilename()
         if filepath:
             Loader(filepath).load()
-            self.__gui.get_table().load_data(State.get_state().current_data.data.sphereNodes)
+            self.__gui.get_table().load_data(State.get_state().current_data.data.all_nodes)
             State.get_state().current_file_path = filepath
             self.__gui.get_status_bar().update()
 

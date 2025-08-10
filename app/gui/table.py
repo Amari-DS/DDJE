@@ -1,9 +1,10 @@
 import tkinter as tk
 from dataclasses import dataclass
 from tkinter import ttk
+from tkinter.messagebox import showerror
 from typing import TYPE_CHECKING, Any, Dict, List
 
-from app.core.models import Node
+from app.core.models import Node, NoteType
 from app.gui.edit_window import EditWindow
 
 if TYPE_CHECKING:
@@ -68,6 +69,9 @@ class Table(object):
 
     def __on_double_click(self, _):
         node = self.get_selection()
+        if node.noteType in (NoteType.WALL_START, NoteType.WALL_END):
+            showerror(title='Error', message=f'Unsupported')
+            return
         edit_window = EditWindow(self.__gui, node)
         edit_window.open()
 

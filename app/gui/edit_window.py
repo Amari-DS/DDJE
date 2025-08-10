@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter.messagebox import showerror
 from typing import TYPE_CHECKING
 
-from app.core.models import Node
+from app.core.models import Node, NoteType
 from app.core.state import State
 
 if TYPE_CHECKING:
@@ -13,7 +13,6 @@ if TYPE_CHECKING:
 class EditWindow(object):
     __width = 150
     __height = 75
-    __min_value = 0
     __max_value = 10
 
     def __init__(self, gui: 'GUI', content: Node):
@@ -21,7 +20,7 @@ class EditWindow(object):
         self.__gui = gui
         self.__counter_value = tk.IntVar()
         self.__window = self.__setup()
-
+        self.__min_value = -1 if self.__node.noteType == NoteType.ROAD_BLOCK else 0
 
     def __setup(self) -> tk.Toplevel:
         root = self.__gui.get_root()
