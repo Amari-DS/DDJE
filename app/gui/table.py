@@ -54,7 +54,7 @@ class Table(object):
     def load_data(self, nodes_list: List[Node]):
         self.__reset()
         self.__content = {n.id: n for n in nodes_list}
-        for node in sorted(nodes_list, key=lambda n: n.time):
+        for node in sorted(nodes_list, key=lambda n: n.noteOrder):
             note_image = node.noteType.binded_value
             self.__table.insert('', tk.END, iid=node.id, values=node.to_repr(),
                                 text=' ' + note_image.label, image=note_image.image)

@@ -55,7 +55,6 @@ class NoteType(BindedEnum):
 @dataclass
 class Node(BaseEntry):
      noteOrder: int
-     time: float
      position: Position
      noteType: NoteType
      __parent: 'Data' = field(metadata={'skip': True}, default=None)
@@ -75,7 +74,6 @@ class Node(BaseEntry):
      def from_json(parent: 'Data', json_data) -> 'Node':
          node = Node(
              noteOrder=json_data['noteOrder'],
-             time=json_data['time'],
              position=Position.from_json(json_data.pop('position')),
              noteType=NoteType(json_data['noteType']),
              other_data=json_data
