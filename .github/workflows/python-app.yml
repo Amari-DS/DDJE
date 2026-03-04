@@ -8,6 +8,12 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
+  workflow_dispatch:
+    inputs:
+      build_type:
+        description: 'Test build'
+        required: true
+        default: 'test'
 
 permissions:
   contents: read
