@@ -5,9 +5,18 @@ name: Python application
 
 on:
   workflow_dispatch:
+    inputs:
+      make_release:
+        description: 'Создать GitHub Release?'
+        required: true
+        type: boolean
+        default: false
 
 permissions:
   contents: read
+
+env:
+  APP_VERSION: "1.0.0" 
 
 jobs:
   build:
@@ -27,8 +36,23 @@ jobs:
           pip install pyinstaller
       - name: Build EXE with PyInstaller
         run: python -m PyInstaller app.spec
+      - name: Rename EXE with Build Number
+        shell: pwsh
+        run: |
+          $buildNum = "${{ github.run_number }}"
+          $fullVersion = "${{ env.APP_VERSION }}-${{ github.run_number }}"
+          Get-ChildItem "dist/*.exe" | Rename-Item -NewName { $_.BaseName + "_" + $fullVersion + $_.Extension }
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: ddje-app
           path: dist/*.exe
+      - name: Release Manual Build
+        uses: softprops/action-gh-release@v2
+        if: github.event.inputs.make_release == 'true'
+        with:
+          files: dist/*.exe
+          tag_name: "v${{ env.APP_VERSION }}-${{ github.run_number }}"
+          name: "Release v${{ env.APP_VERSION }}-${{ github.run_number }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
