@@ -2,7 +2,7 @@ from dataclasses import dataclass, field, asdict
 from functools import cached_property
 from typing import Any, List, Dict
 
-from app.misc.misc import BindedEnum, NoteImage
+from app.misc.misc import BindedEnum, NoteImage, resource_path
 
 
 @dataclass
@@ -46,13 +46,13 @@ class Position:
 
 
 class NoteType(BindedEnum):
-    HAND_LEFT = 6, NoteImage('resources/icons/hl_r.png', 'L')
-    HAND_RIGHT = 7, NoteImage('resources/icons/hr_b.png', 'R')
-    FOOT_LEFT = 8, NoteImage('resources/icons/fl_r.png', 'L')
-    FOOT_RIGHT = 9, NoteImage('resources/icons/fr_b.png', 'R')
-    ROAD_BLOCK = 14, NoteImage('resources/icons/rb_h.png', 'B')
-    WALL_START = 15, NoteImage('resources/icons/ws_v.png', 'W')
-    WALL_END = 16, NoteImage('resources/icons/we_v.png', 'W')
+    HAND_LEFT = 6, NoteImage(resource_path('resources/icons/hl_r.png'), 'L')
+    HAND_RIGHT = 7, NoteImage(resource_path('resources/icons/hr_b.png'), 'R')
+    FOOT_LEFT = 8, NoteImage(resource_path('resources/icons/fl_r.png'), 'L')
+    FOOT_RIGHT = 9, NoteImage(resource_path('resources/icons/fr_b.png'), 'R')
+    ROAD_BLOCK = 14, NoteImage(resource_path('resources/icons/rb_h.png'), 'B')
+    WALL_START = 15, NoteImage(resource_path('resources/icons/ws_v.png'), 'W')
+    WALL_END = 16, NoteImage(resource_path('resources/icons/we_v.png'), 'W')
 
 
 @dataclass

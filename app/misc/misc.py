@@ -1,3 +1,5 @@
+import os
+import sys
 import tkinter as tk
 from enum import Enum
 from functools import cached_property
@@ -29,3 +31,17 @@ class NoteImage(object):
     @property
     def label(self):
         return self.__label
+
+
+def resource_path(relative_path: str) -> str:
+    """ Получает абсолютный путь к ресурсу, работает для разработки и для PyInstaller """
+    # noinspection PyBroadException
+    try:
+        # PyInstaller создает временную папку и сохраняет путь в _MEIPASS
+        # noinspection PyUnresolvedReferences,PyProtectedMember
+        base_path = sys._MEIPASS
+    except:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
